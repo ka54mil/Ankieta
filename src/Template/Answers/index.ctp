@@ -19,18 +19,20 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('answer_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('question_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('answer_id', __('Answer id')) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('answer', __('Answer')) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('question_id', __('Question id')) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('user_id', __('User id')) ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($answers as $answer): ?>
             <tr>
-                <td><?= $answer->has('answer') ? $this->Html->link($answer->answer->answer_id, ['controller' => 'Answers', 'action' => 'view', $answer->answer->answer_id]) : '' ?></td>
-                <td><?= $answer->has('question') ? $this->Html->link($answer->question->question_id, ['controller' => 'Questions', 'action' => 'view', $answer->question->question_id]) : '' ?></td>
-                <td><?= $answer->has('user') ? $this->Html->link($answer->user->user_id, ['controller' => 'Users', 'action' => 'view', $answer->user->user_id]) : '' ?></td>
+                <td><?= $answer->has('answer_id') ? $this->Html->link($answer->answer_id, ['controller' => 'Answers', 'action' => 'view', $answer->answer_id]) : '' ?></td>
+                <td><?= $answer->has('answer') ? $this->Html->link($answer->answer, ['controller' => 'Answers', 'action' => 'view', $answer->answer_id]) : '' ?></td>
+                <td><?= $answer->has('question_id') ? $this->Html->link($answer->question_id, ['controller' => 'Questions', 'action' => 'view', $answer->question_id]) : '' ?></td>
+                <td><?= $answer->has('user_id') ? $this->Html->link($answer->user_id, ['controller' => 'Users', 'action' => 'view', $answer->user_id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $answer->answer_id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $answer->answer_id]) ?>

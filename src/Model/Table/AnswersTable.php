@@ -38,10 +38,6 @@ class AnswersTable extends Table
         $this->setDisplayField('answer_id');
         $this->setPrimaryKey('answer_id');
 
-        $this->belongsTo('Answers', [
-            'foreignKey' => 'answer_id',
-            'joinType' => 'INNER'
-        ]);
         $this->belongsTo('Questions', [
             'foreignKey' => 'question_id',
             'joinType' => 'INNER'
@@ -76,7 +72,6 @@ class AnswersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['answer_id'], 'Answers'));
         $rules->add($rules->existsIn(['question_id'], 'Questions'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
