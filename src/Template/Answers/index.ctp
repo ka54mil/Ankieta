@@ -18,9 +18,9 @@
                 <td><?= $answer->has('question_id') ? $this->Html->link($answer->question_id, ['controller' => 'Questions', 'action' => 'view', $answer->question_id]) : '' ?></td>
                 <td><?= $answer->has('user_id') ? $this->Html->link($answer->user_id, ['controller' => 'Users', 'action' => 'view', $answer->user_id]) : '' ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $answer->answer_id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $answer->answer_id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $answer->answer_id], ['confirm' => __('Are you sure you want to delete # {0}?', $answer->answer_id)]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $answer->answer_id], ['class' => 'glyphicon glyphicon-search','escape' =>false]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $answer->answer_id], ['class' => 'glyphicon glyphicon-pencil','escape' =>false]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $answer->answer_id], ['class' =>'glyphicon btn btn-danger' ,'confirm' => __('Are you sure you want to delete # {0}?', $answer->answer_id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

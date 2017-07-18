@@ -2,8 +2,8 @@
     <h3><?= h($user->user_id) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('User') ?></th>
-            <td><?= $user->has('user') ? $this->Html->link($user->user->user_id, ['controller' => 'Users', 'action' => 'view', $user->user->user_id]) : '' ?></td>
+            <th scope="row"><?= __('User id') ?></th>
+            <td><?= $user->has('user_id') ? $this->Html->link($user->user_id, ['controller' => 'Users', 'action' => 'view', $user->user_id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Username') ?></th>

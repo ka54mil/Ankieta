@@ -20,7 +20,6 @@ class TableModifyBehavior extends Behavior
         if ($this->_table->save($entity)) {
             return $entity; 
         } 
-        debug($entity);
         return false;
 	}
 }
