@@ -14,4 +14,3 @@
  */
 
 require 'webroot' . DIRECTORY_SEPARATOR . 'index.php';
-$this->Html->text("hello");
