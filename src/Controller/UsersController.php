@@ -13,6 +13,9 @@ use App\Controller\AppController;
 class UsersController extends AppController
 {
 
+    public $paginate = [
+        'limit' => 10
+    ];
     /**
      * Index method
      *
@@ -20,9 +23,6 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users']
-        ];
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));

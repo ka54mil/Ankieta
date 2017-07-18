@@ -35,11 +35,6 @@ class QuestionsTable extends Table
         $this->setTable('questions');
         $this->setDisplayField('question_id');
         $this->setPrimaryKey('question_id');
-
-        $this->belongsTo('Questions', [
-            'foreignKey' => 'question_id',
-            'joinType' => 'INNER'
-        ]);
     }
 
     /**
@@ -66,8 +61,6 @@ class QuestionsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['question_id'], 'Questions'));
-
         return $rules;
     }
 }
