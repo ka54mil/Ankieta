@@ -32,14 +32,11 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('TableModify', ['model' => $this]);
+
         $this->setTable('users');
         $this->setDisplayField('user_id');
         $this->setPrimaryKey('user_id');
-
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
-        ]);
     }
 
     /**
@@ -77,16 +74,11 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }
 
     public function saveUser($data){
-        $user = $this->Users->patchEntity($this->newEntity(), $data);
-        if ($this->Users->save($user)) {
-            return $user; 
-        } 
-        return false;
+        return $this->_save($data);
     }
 }

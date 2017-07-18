@@ -16,6 +16,12 @@ class UsersController extends AppController
     public $paginate = [
         'limit' => 10
     ];
+
+    public function initialize(){
+        parent::initialize();
+
+        $this->Auth->allow(['add']);
+    }
     /**
      * Index method
      *
@@ -53,7 +59,18 @@ class UsersController extends AppController
      */
     public function add()
     {
-        $this->Auth->register();
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->saveUser( $this->request->getData());
+            if ($user != false){
+                $this->Flash->success(__('The user has been saved.'));
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
     }
 
     /**

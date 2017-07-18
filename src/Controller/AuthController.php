@@ -13,7 +13,7 @@ class AuthController extends AppController
     public function initialize()
     {
     	parent::initialize();
-        $this->Auth->allow(['login', 'register']);
+        $this->Auth->allow(['login']);
     }
 
     /**
@@ -51,23 +51,5 @@ class AuthController extends AppController
     public function logout()
     {
         return $this->redirect($this->Auth->logout());
-    }
-
-    public function register()
-    {
-    	$this->loadModel("Users");
-		$user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-        	$user = $this->Users->saveUser($this->request->getData());
-        	if ($user != false){
-        		$this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect('/');
-        	} else {
-       			$this->Flash->error(__('The user could not be saved. Please, try again.'));
-            }
-        }
-        $this->set(compact('user'));
-        $this->set('_serialize', ['user']);
     }
 }
