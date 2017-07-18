@@ -28,42 +28,78 @@ use Cake\View\Exception\MissingTemplateException;
  */
 class PagesController extends AppController
 {
+    public function initialize(){
+        parent::initialize();
+        $this->loadModel('Answers');
+    }
 
     /**
      * Displays a view
-     *
-     * @param string ...$path Path segments.
-     * @return void|\Cake\Network\Response
-     * @throws \Cake\Network\Exception\ForbiddenException When a directory traversal attempt.
-     * @throws \Cake\Network\Exception\NotFoundException When the view file could not
-     *   be found or \Cake\View\Exception\MissingTemplateException in debug mode.
+     * @return void
      */
-    public function display(...$path)
+    public function index($page = null)
     {
-        $count = count($path);
-        if (!$count) {
-            return $this->redirect('/');
-        }
-        if (in_array('..', $path, true) || in_array('.', $path, true)) {
-            throw new ForbiddenException();
-        }
-        $page = $subpage = null;
+        if ($page == null || $page < 3) {
+            $this->paginate = [
+                'limit' => 2,
+                'page' => 1
+            ];
+        } else {
 
-        if (!empty($path[0])) {
-            $page = $path[0];
+            $this->paginate = [
+                'limit' => 1,
+                'page' => $page
+            ];
         }
-        if (!empty($path[1])) {
-            $subpage = $path[1];
-        }
-        $this->set(compact('page', 'subpage'));
 
+        $this->loadModel('Questions');
+        $answers = [];
         try {
-            $this->render(implode('/', $path));
-        } catch (MissingTemplateException $e) {
-            if (Configure::read('debug')) {
-                throw $e;
-            }
-            throw new NotFoundException();
+            $questions = $this->paginate($this->Questions);
+        } catch (NotFoundException $exeption){
+            return $this->redirect(['action' => 'thanks']);
         }
+        $user_id = $this->Auth->user()['user_id'];
+        foreach ($questions as $question) {
+            $answers[] = $this->Answers->newEntity(['user_id' => $user_id, 'question_id' => $question->question_id]);
+
+        }
+        $this->set(compact('questions', 'user_id', 'answers'));
+        $this->set('_serialize', ['questions']);
+        $this->render('home');
+
+    }
+
+    public function answer($page)
+    {
+        $tmp = $page;
+        if ($this->request->is('post')){
+            $answers = $this->request->getData();
+            foreach ($answers['user_id'] as $key => $answer) {
+                $data = [];
+                foreach ($answers as $field => $value) {
+                    $data[$field] = $value[$key];
+                }
+
+                if ($this->Answers->addAnswer($data) == false){
+                    $this->Flash->error(__('The answer could not be saved. Please, try again.'));
+                    $page = $tmp;
+                } else {
+                    $page++;
+                }
+
+            }
+
+            return $this->redirect(['action' => 'index', $page]);
+
+        }
+       return $this->redirect(['url' => ['action' => 'index', $page]]);
+
+        $this->autoRender = false;
+
+    }
+
+    public function thanks(){
+
     }
 }
