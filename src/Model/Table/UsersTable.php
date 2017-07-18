@@ -78,7 +78,11 @@ class UsersTable extends Table
         return $rules;
     }
 
-    public function saveUser($data){
-        return $this->_save($data);
+    public function addUser($data){
+        return $this->_add($data);
+    }
+
+    public function editUser($user, $data){
+        return $this->_save($user, $data);
     }
 }

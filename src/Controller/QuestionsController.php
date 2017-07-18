@@ -53,15 +53,14 @@ class QuestionsController extends AppController
     {
         $question = $this->Questions->newEntity();
         if ($this->request->is('post')) {
-            $question = $this->Questions->patchEntity($question, $this->request->getData());
-            if ($this->Questions->save($question)) {
+            $question = $this->Questions->addQuestion( $this->request->getData());
+            if ($question != false){
                 $this->Flash->success(__('The question has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
-            }
+            } else {
             $this->Flash->error(__('The question could not be saved. Please, try again.'));
+            }
         }
-        $questions = $this->Questions->Questions->find('list', ['limit' => 200]);
         $this->set(compact('question', 'questions'));
         $this->set('_serialize', ['question']);
     }
@@ -75,19 +74,15 @@ class QuestionsController extends AppController
      */
     public function edit($id = null)
     {
-        $question = $this->Questions->get($id, [
-            'contain' => []
-        ]);
+        $question = $this->Questions->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $question = $this->Questions->patchEntity($question, $this->request->getData());
-            if ($this->Questions->save($question)) {
+            if ($this->Questions->editQuestion($question, $this->request->getData())) {
                 $this->Flash->success(__('The question has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The question could not be saved. Please, try again.'));
         }
-        $questions = $this->Questions->Questions->find('list', ['limit' => 200]);
         $this->set(compact('question', 'questions'));
         $this->set('_serialize', ['question']);
     }
@@ -102,8 +97,7 @@ class QuestionsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $question = $this->Questions->get($id);
-        if ($this->Questions->delete($question)) {
+        if ($this->Questions->_delete($id)) {
             $this->Flash->success(__('The question has been deleted.'));
         } else {
             $this->Flash->error(__('The question could not be deleted. Please, try again.'));

@@ -32,6 +32,7 @@ class QuestionsTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('TableModify');
         $this->setTable('questions');
         $this->setDisplayField('question_id');
         $this->setPrimaryKey('question_id');
@@ -62,5 +63,13 @@ class QuestionsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         return $rules;
+    }
+
+    public function addQuestion($data){
+        return $this->_add($data);
+    }
+
+    public function editQuestion($question, $data){
+        return $this->_save($question, $data);
     }
 }

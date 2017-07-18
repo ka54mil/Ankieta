@@ -2,16 +2,16 @@
     <h3><?= h($answer->answer_id) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('Answer') ?></th>
-            <td><?= $answer->has('answer') ? $this->Html->link($answer->answer->answer_id, ['controller' => 'Answers', 'action' => 'view', $answer->answer->answer_id]) : '' ?></td>
+            <th scope="row"><?= __('Answer id') ?></th>
+            <td><?= $answer->has('answer_id') ? $this->Html->link($answer->answer_id, ['controller' => 'Answers', 'action' => 'view', $answer->answer_id]) : '' ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Question') ?></th>
-            <td><?= $answer->has('question') ? $this->Html->link($answer->question->question_id, ['controller' => 'Questions', 'action' => 'view', $answer->question->question_id]) : '' ?></td>
+            <th scope="row"><?= __('Question id') ?></th>
+            <td><?= $answer->has('question_id') ? $this->Html->link($answer->question_id, ['controller' => 'Questions', 'action' => 'view', $answer->question_id]) : '' ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('User') ?></th>
-            <td><?= $answer->has('user') ? $this->Html->link($answer->user->user_id, ['controller' => 'Users', 'action' => 'view', $answer->user->user_id]) : '' ?></td>
+            <th scope="row"><?= __('User id') ?></th>
+            <td><?= $answer->has('user_id') ? $this->Html->link($answer->user_id, ['controller' => 'Users', 'action' => 'view', $answer->user_id]) : '' ?></td>
         </tr>
     </table>
     <div class="row">

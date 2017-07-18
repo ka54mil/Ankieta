@@ -54,18 +54,16 @@ class AnswersController extends AppController
     {
         $answer = $this->Answers->newEntity();
         if ($this->request->is('post')) {
-            $answer = $this->Answers->patchEntity($answer, $this->request->getData());
-            if ($this->Answers->save($answer)) {
+            $answer = $this->Answers->addAnswer( $this->request->getData());
+            if ($answer != false){
                 $this->Flash->success(__('The answer has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The answer could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The answer could not be saved. Please, try again.'));
         }
-        $answers = $this->Answers->Answers->find('list', ['limit' => 200]);
-        $questions = $this->Answers->Questions->find('list', ['limit' => 200]);
-        $users = $this->Answers->Users->find('list', ['limit' => 200]);
-        $this->set(compact('answer', 'answers', 'questions', 'users'));
+        $questions = $this->Answers->Questions->find('list');
+        $users = $this->Answers->Users->find('list', ['order' => ['user_id' =>'asc']]);
+        $this->set(compact('answer', 'questions', 'users'));
         $this->set('_serialize', ['answer']);
     }
 
@@ -78,22 +76,19 @@ class AnswersController extends AppController
      */
     public function edit($id = null)
     {
-        $answer = $this->Answers->get($id, [
-            'contain' => []
-        ]);
+        $answer = $this->Answers->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $answer = $this->Answers->patchEntity($answer, $this->request->getData());
-            if ($this->Answers->save($answer)) {
+            if ($this->Answers->editAnswer($answer, $this->request->getData())) {
                 $this->Flash->success(__('The answer has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The answer could not be saved. Please, try again.'));
         }
-        $answers = $this->Answers->Answers->find('list', ['limit' => 200]);
-        $questions = $this->Answers->Questions->find('list', ['limit' => 200]);
-        $users = $this->Answers->Users->find('list', ['limit' => 200]);
-        $this->set(compact('answer', 'answers', 'questions', 'users'));
+
+        $questions = $this->Answers->Questions->find('list');
+        $users = $this->Answers->Users->find('list', ['order' => ['user_id' =>'asc']]);
+        $this->set(compact('answer', 'questions', 'users'));
         $this->set('_serialize', ['answer']);
     }
 
@@ -107,8 +102,7 @@ class AnswersController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $answer = $this->Answers->get($id);
-        if ($this->Answers->delete($answer)) {
+        if ($this->Answers->_delete($id)) {
             $this->Flash->success(__('The answer has been deleted.'));
         } else {
             $this->Flash->error(__('The answer could not be deleted. Please, try again.'));

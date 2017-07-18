@@ -34,6 +34,8 @@ class AnswersTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('TableModify');
+
         $this->setTable('answers');
         $this->setDisplayField('answer_id');
         $this->setPrimaryKey('answer_id');
@@ -76,5 +78,13 @@ class AnswersTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
+    }
+
+    public function addAnswer($data){
+        return $this->_add($data);
+    }
+
+    public function editAnswer($answer, $data){
+        return $this->_save($answer, $data);
     }
 }
