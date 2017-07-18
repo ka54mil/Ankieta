@@ -81,4 +81,12 @@ class UsersTable extends Table
 
         return $rules;
     }
+
+    public function saveUser($data){
+        $user = $this->Users->patchEntity($this->newEntity(), $data);
+        if ($this->Users->save($user)) {
+            return $user; 
+        } 
+        return false;
+    }
 }

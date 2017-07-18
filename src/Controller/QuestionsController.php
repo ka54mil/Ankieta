@@ -13,6 +13,9 @@ use App\Controller\AppController;
 class QuestionsController extends AppController
 {
 
+    public $paginate = [
+            'limit' => 10
+        ];
     /**
      * Index method
      *
@@ -20,9 +23,6 @@ class QuestionsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Questions']
-        ];
         $questions = $this->paginate($this->Questions);
 
         $this->set(compact('questions'));
@@ -38,9 +38,7 @@ class QuestionsController extends AppController
      */
     public function view($id = null)
     {
-        $question = $this->Questions->get($id, [
-            'contain' => ['Questions']
-        ]);
+        $question = $this->Questions->get($id);
 
         $this->set('question', $question);
         $this->set('_serialize', ['question']);

@@ -10,8 +10,9 @@ class AuthController extends AppController
 {
     public $Auth = false;
 
-    public function beforeFilter(Event $event)
+    public function initialize()
     {
+    	parent::initialize();
         $this->Auth->allow(['login', 'register']);
     }
 
@@ -24,12 +25,12 @@ class AuthController extends AppController
     {
     	$this->loadModel("Users");
 
-    	if (!$this->Auth->user()){
+    	if ($this->Auth->user()){
     		return $this->redirect($this->Auth->redirectUrl());
     	}
 
-    	$user = $this->Users->newEntity();
         if ($this->request->is('post')) {
+
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
@@ -37,6 +38,7 @@ class AuthController extends AppController
             }
             $this->Flash->error(__('Invalid username or password, try again'));
         }
+    	$user = $this->Users->newEntity();
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
@@ -54,12 +56,17 @@ class AuthController extends AppController
     public function register()
     {
     	$this->loadModel("Users");
+		$user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+        	$user = $this->Users->saveUser($this->request->getData());
+        	if ($user != false){
+        		$this->Flash->success(__('The user has been saved.'));
 
-    	if (!$this->Auth->user()){
-    		return $this->redirect($this->Auth->redirectUrl());
-    	}
-
-    	$user = $this->Users->newEntity();
+                return $this->redirect('/');
+        	} else {
+       			$this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
